@@ -1,0 +1,25 @@
+{
+    "name": "stivni/php-pdftk-manipulators",
+    "description": "Some helper classes to manipulate PDF files in PHP with the Pdftk library",
+    "homepage": "https://github.com/stivni/PhpPdftkManipulators",
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "authors": [
+        {
+            "name": "Stijn Vannieuwenhuyse",
+            "email": "stijn@vannieuwenhuyse.net"
+        }
+    ],
+    "keywords": [],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpPdftkManipulators\\": ["src/PhpPdftkManipulators", "tests/PhpPdftkManipulators"]
+        }
+    },
+    "minimum-stability": "dev"
+}
