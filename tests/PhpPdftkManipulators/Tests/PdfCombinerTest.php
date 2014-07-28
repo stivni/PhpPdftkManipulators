@@ -44,6 +44,25 @@ class PdfCombinerTest extends \PHPUnit_Framework_TestCase
 		$this->assertStringDistanceInPercent('99', $expected, $result);
 	}
 
+	/**
+	 * @test
+	 * @medium
+	 */
+	public function concatenates_pdfs_from_file_paths()
+	{
+		$pdfCombiner = new PdfCombiner('pdftk');
+		$result = $pdfCombiner->concatenateFromFilePaths(array(
+			(__DIR__.'/fixtures/sample_bw.pdf'),
+			(__DIR__.'/fixtures/sample_color.pdf'),
+		));
+
+        file_put_contents(__DIR__.'/fixtures/expected_concatenated.pdf', $result);
+
+		$expected = file_get_contents(__DIR__.'/fixtures/expected_concatenated.pdf');
+		$this->assertGreaterThan(0, strlen($result), "The resulting pdf should not be zero characters");
+		$this->assertStringDistanceInPercent('99', $expected, $result);
+	}
+
 	private function assertStringDistanceInPercent($minimumPercentage, $expected, $actual)
 	{
 		$percentage = 0;

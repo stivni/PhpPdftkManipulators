@@ -49,27 +49,40 @@ class PdfCombiner
      */
     public function concatenate(array $originals)
 	{
-		$sourceFiles = array();
+		$sourceFilePaths = array();
 		foreach($originals as $k => $original)
 		{
-			$sourceFiles[$k] = tempnam(sys_get_temp_dir(), 'pdf');
-			file_put_contents($sourceFiles[$k], $original);
+			$sourceFilePaths[$k] = tempnam(sys_get_temp_dir(), 'pdf');
+			file_put_contents($sourceFilePaths[$k], $original);
 		}
 
-		$outputFile = tempnam(sys_get_temp_dir(), 'pdf');
+        $result =  $this->concatenateFromFilePaths($sourceFilePaths);
 
-		$command = sprintf("{$this->pdftkBinary} %s cat output $outputFile", implode(' ', $sourceFiles));
-		exec($command);
-		$result = file_get_contents($outputFile);
-		if(!$result) {
-			throw new \RuntimeException("Couldn't catenate PDFs");
-		}
+        foreach($sourceFilePaths as $sourceFile) {
+            @unlink($sourceFile);
+        }
 
-		foreach($sourceFiles as $sourceFile) {
-			@unlink($sourceFile);
-		}
-		@unlink($outputFile);
+        return $result;
 
-		return $result;
-	}
+    }
+
+    /**
+     * @param string[] $sourceFilePaths
+     * @return string
+     */
+    public function concatenateFromFilePaths($sourceFilePaths)
+    {
+
+        $outputFile = tempnam(sys_get_temp_dir(), 'pdf');
+
+        $command = sprintf("{$this->pdftkBinary} %s cat output $outputFile", implode(' ', $sourceFilePaths));
+        exec($command);
+        $result = file_get_contents($outputFile);
+        if(!$result) {
+            throw new \RuntimeException("Couldn't catenate PDFs");
+        }
+
+        @unlink($outputFile);
+        return $result;
+    }
 }
