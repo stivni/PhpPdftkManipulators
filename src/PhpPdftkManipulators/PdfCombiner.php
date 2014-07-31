@@ -76,7 +76,12 @@ class PdfCombiner
         $outputFile = tempnam(sys_get_temp_dir(), 'pdf');
 
         $command = sprintf("{$this->pdftkBinary} %s cat output $outputFile", implode(' ', $sourceFilePaths));
-        exec($command);
+        exec($command, $output, $returnCode); 
+        
+        if($returnCode != 0) { 
+            throw \RuntimeException("Couldn't catenate PDFs"); 
+        }
+        
         $result = file_get_contents($outputFile);
         if(!$result) {
             throw new \RuntimeException("Couldn't catenate PDFs");
