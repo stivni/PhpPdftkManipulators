@@ -79,7 +79,7 @@ class PdfCombiner
         exec($command, $output, $returnCode); 
         
         if($returnCode != 0) { 
-            throw \RuntimeException("Couldn't catenate PDFs"); 
+            throw new \RuntimeException("Couldn't catenate PDFs"); 
         }
         
         $result = file_get_contents($outputFile);
